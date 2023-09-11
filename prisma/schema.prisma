@@ -10,7 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id String @id @default(auto()) @map("_id") @db.ObjectId
-//   // Other fields
-// }
+model User {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  email String  @unique
+  Event Event[]
+}
+
+model Event {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id      String?  @db.ObjectId
+  title        String
+  description  String
+  categories   String[]
+  city         String
+  location     Float[]
+  banner       String
+  flyers       String[] @default([])
+  coupons      String[] @default([])
+  price        Int
+  sector       String
+  date         DateTime
+  created_at   DateTime @default(now())
+  participants User?    @relation(fields: [user_id], references: [id])
+}
