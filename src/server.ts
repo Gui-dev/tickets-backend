@@ -1,44 +1,55 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
+import multipart from '@fastify/multipart'
+import { ZodError } from 'zod'
 import 'dotenv/config'
 
-import { userRoutes } from './routes/user'
 import { AppError } from './errors/app-error'
+import { userRoutes } from './routes/user.routes'
+import { eventRoutes } from './routes/event.routes'
 
-const app = Fastify()
-const PORT = 3333 || process.env.PORT
+export const app = Fastify()
 
-app.register(cors, {
-  origin: true,
-})
+export const main = () => {
+  const PORT = 3333 || process.env.PORT
 
-app.register(userRoutes)
-
-app.setErrorHandler(function (error, request, reply) {
-  if (error instanceof AppError) {
-    // Log error
-    console.log(error)
-    // Send error response
-    reply.status(error.statusCode!).send({ error: error.message })
-  } else if (error instanceof Fastify.errorCodes.FST_ERR_BAD_STATUS_CODE) {
-    // Log error
-    console.log(error)
-    // Send error response
-    reply.status(error.statusCode!).send({ error: error.message })
-  } else {
-    // fastify will use parent error handler to handle this
-    reply.status(500).send({ error: error.message })
-  }
-})
-
-app
-  .listen({
-    port: PORT,
-    host: '0.0.0.0',
+  app.register(multipart, { attachFieldsToBody: true })
+  app.register(cors, {
+    origin: true,
   })
-  .then(() => {
-    console.log('🚀 Server running on http://localhost:3333')
+
+  app.register(eventRoutes)
+  app.register(userRoutes)
+
+  app.setErrorHandler(function (error, _request, reply) {
+    if (error instanceof AppError) {
+      console.log(error)
+      return reply.status(error.statusCode!).send({ error: error.message })
+    }
+
+    if (error instanceof ZodError) {
+      const toSend = {
+        message: 'Validation error',
+        errors: JSON.parse(error.message),
+        statusCode: error.statusCode || 400,
+      }
+      return reply.code(toSend.statusCode).send(toSend)
+    }
+    console.log('ERROR: ', error)
+    return reply.status(500).send({ error: 'Internal server error' })
   })
-  .catch((error) => {
-    console.log(error)
-  })
+
+  app
+    .listen({
+      port: PORT,
+      host: '0.0.0.0',
+    })
+    .then(() => {
+      console.log('🚀 Server running on http://localhost:3333')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+main()
