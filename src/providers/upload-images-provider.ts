@@ -1,21 +1,18 @@
-import { FastifyReply } from 'fastify'
 import { randomUUID } from 'crypto'
 import { MultipartFile } from '@fastify/multipart'
 
 import { supabase } from '../services/supabase'
+import { AppError } from '../errors/app-error'
 
 export class UploadImagesProvider {
-  public static async uploadBannerImage(
-    banner: any,
-    response: FastifyReply,
-  ): Promise<string | FastifyReply> {
+  public static async uploadBannerImage(banner: any): Promise<string> {
     const bannerBuffer = await banner.toBuffer()
     const { data: bannerPath, error } = await supabase.storage
       .from('tickets-bucket')
       .upload(`banner/${randomUUID()}-${banner?.filename}`, bannerBuffer)
     if (error) {
       console.log(error)
-      return response.status(400).send({ error: 'Erro ao enviar imagem' })
+      throw new AppError('Erro ao enviar a imagem')
     }
     const { data: getBannerUrl } = supabase.storage
       .from('tickets-bucket')
@@ -23,10 +20,7 @@ export class UploadImagesProvider {
     return getBannerUrl.publicUrl
   }
 
-  public static async uploadFlyersImages(
-    flyers: any,
-    response: FastifyReply,
-  ): Promise<Array<string> | FastifyReply> {
+  public static async uploadFlyersImages(flyers: any): Promise<Array<string>> {
     const flyersUrl: string[] = []
 
     if (flyers.length > 0) {
@@ -38,7 +32,7 @@ export class UploadImagesProvider {
 
         if (error) {
           console.log(error)
-          return response.status(400).send({ error: 'Erro ao enviar imagem' })
+          throw new AppError('Erro ao enviar a imagem')
         }
 
         const { data: flyerUrl } = supabase.storage
@@ -58,7 +52,7 @@ export class UploadImagesProvider {
 
       if (error) {
         console.log(error)
-        return response.status(400).send({ error: 'Erro ao enviar imagem' })
+        throw new AppError('Erro ao enviar a imagem')
       }
 
       const { data: flyerUrl } = supabase.storage
