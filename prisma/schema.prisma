@@ -24,7 +24,7 @@ model Event {
   description  String
   categories   String[]
   city         String
-  location     Float[]
+  location     String[]
   banner       String
   flyers       String[] @default([])
   coupons      String[] @default([])

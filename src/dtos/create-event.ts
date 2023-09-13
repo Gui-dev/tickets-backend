@@ -4,7 +4,7 @@ export interface ICreateEvent {
   description: string
   categories: Array<string>
   city: string
-  location: Array<number>
+  location: Array<string>
   banner: string
   flyers: Array<string>
   coupons: Array<string>

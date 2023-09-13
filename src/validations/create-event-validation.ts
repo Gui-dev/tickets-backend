@@ -7,14 +7,8 @@ export const createEventValidation = z.object({
   categories: z.string().array(),
   city: z.string().nonempty('Campo titulo é obrigatório'),
   location: z.array(
-    z.coerce.number({
-      invalid_type_error: 'Campo latitude é obrigatório',
-      required_error: 'Campo latitude é obrigatório',
-    }),
-    z.coerce.number({
-      invalid_type_error: 'Campo longitude é obrigatório',
-      required_error: 'Campo longitude é obrigatório',
-    }),
+    z.string().nonempty('Campo latitude é obrigatório'),
+    z.string().nonempty('Campo longitude é obrigatório'),
   ),
   banner: z.string().nonempty('Url da imagem do banner é obrigatório'),
   flyers: z.array(

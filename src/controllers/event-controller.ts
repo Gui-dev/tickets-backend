@@ -4,8 +4,6 @@ import { MultipartFile } from '@fastify/multipart'
 import { CreateEvent } from '../use-cases/create-event'
 import { createEventValidation } from '../validations/create-event-validation'
 import { UploadImagesProvider } from '../providers/upload-images-provider'
-// import { uploadFlyersImages } from '../providers/upload-flyers-image'
-// import { uploadBannerImage } from '../providers/upload-banner-image'
 
 type IRequestParams = {
   user_id?: {
@@ -49,18 +47,11 @@ export class EventController {
   ): Promise<FastifyReply> {
     const data: IRequestParams = request.body as IRequestParams
 
-    const banner = await UploadImagesProvider.uploadBannerImage(
-      data.banner,
-      response,
-    )
-    const flyers = await UploadImagesProvider.uploadFlyersImages(
-      data.flyers,
-      response,
-    )
-    const locationResult = data.location.value.trim().split(',')
-    const location = [Number(locationResult[0]), Number(locationResult[1])]
-    const categories = data.categories.value.trim().split(',')
-    const coupons = data.coupons.value.trim().split(',')
+    const banner = await UploadImagesProvider.uploadBannerImage(data.banner)
+    const flyers = await UploadImagesProvider.uploadFlyersImages(data.flyers)
+    const location = data.location.value.split(', ')
+    const categories = data.categories.value.trim().split(', ')
+    const coupons = data.coupons.value.trim().split(', ')
 
     const eventParse = createEventValidation.parse({
       title: data.title.value,
