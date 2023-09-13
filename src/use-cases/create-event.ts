@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { Event } from '@prisma/client'
 import { IEventRepository } from '../contracts/repositories/event-repository'
 import { ICreateEvent } from '../dtos/create-event'
@@ -11,11 +13,34 @@ export class CreateEvent {
   }
 
   public async execute(data: ICreateEvent): Promise<Event> {
-    const event = await this.eventRepository.create(data)
+    const cityName = await this.getCityNameByCoordinates(
+      data.location[0],
+      data.location[1],
+    )
+
+    const eventParse: ICreateEvent = {
+      ...data,
+      city: cityName,
+    }
+
+    const event = await this.eventRepository.create(eventParse)
     if (!event) {
       throw new AppError('Erro ao criar evento')
     }
 
     return event
+  }
+
+  private async getCityNameByCoordinates(
+    latitude: string,
+    longitude: string,
+  ): Promise<string> {
+    const key = process.env.OPEN_CAGE_KEY
+    console.log(latitude, longitude)
+    const response = await axios.get(
+      `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${key}`,
+    )
+    const city = response.data.results[0].components.city
+    return city
   }
 }
