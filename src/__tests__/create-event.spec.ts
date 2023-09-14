@@ -1,6 +1,6 @@
 import supertest from 'supertest'
 
-import { app } from '../../server'
+import { app } from '../server'
 
 describe('#Create Event', () => {
   it('should be able to create a event', async () => {
