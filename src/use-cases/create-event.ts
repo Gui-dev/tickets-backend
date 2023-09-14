@@ -13,6 +13,15 @@ export class CreateEvent {
   }
 
   public async execute(data: ICreateEvent): Promise<Event> {
+    const eventExists = await this.eventRepository.findByLocationAndDate({
+      location: data.location,
+      date: data.date,
+    })
+
+    if (eventExists) {
+      throw new AppError('Event is already exists', 401)
+    }
+
     const cityName = await this.getCityNameByCoordinates(
       data.location[0],
       data.location[1],
@@ -40,6 +49,11 @@ export class CreateEvent {
     const response = await axios.get(
       `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${key}`,
     )
+
+    if (!response.data) {
+      throw new AppError('Erro ao informar latitude ou longitude')
+    }
+
     const city = response.data.results[0].components.city
     return city
   }
