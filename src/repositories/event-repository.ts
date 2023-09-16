@@ -3,6 +3,8 @@ import { IEventRepository } from '../contracts/repositories/event-repository'
 import { ICreateEvent } from '../dtos/create-event'
 import { prisma } from '../services/prisma'
 import { IFindByLocationAndDate } from '../dtos/find-by-location-and-date'
+import { IFindEventByCityDTO } from '../dtos/find-event-by-city-dto'
+import { IFindEventByLocationDTO } from '../dtos/find-event-by-location-dto'
 
 export class EventRepository implements IEventRepository {
   public async findByLocationAndDate(
@@ -21,6 +23,24 @@ export class EventRepository implements IEventRepository {
     })
 
     return event
+  }
+
+  public async findEventsByCity({
+    city,
+  }: IFindEventByCityDTO): Promise<Event[]> {
+    const events = await prisma.event.findMany({
+      where: {
+        city,
+      },
+    })
+
+    return events
+  }
+
+  public async findEventsByLocation(
+    data: IFindEventByLocationDTO,
+  ): Promise<Event[]> {
+    throw new Error('Method not implemented.')
   }
 
   public async create(data: ICreateEvent): Promise<Event> {
