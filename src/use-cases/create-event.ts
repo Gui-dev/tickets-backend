@@ -1,15 +1,17 @@
-import axios from 'axios'
-
 import { Event } from '@prisma/client'
 import { IEventRepository } from '../contracts/repositories/event-repository'
 import { ICreateEvent } from '../dtos/create-event'
 import { AppError } from '../errors/app-error'
 import { EventRepository } from '../repositories/event-repository'
+import { GetCityByCoordinatesProvider } from './../providers/get-city-by-coordinates-provider'
+import { IGetCityByCoordinatesProvider } from '../providers/contracts/get-city-by-coordinates-provider'
 
 export class CreateEvent {
   private eventRepository: IEventRepository
+  private getCityNameByCoordinatesProvider: IGetCityByCoordinatesProvider
   constructor() {
     this.eventRepository = new EventRepository()
+    this.getCityNameByCoordinatesProvider = new GetCityByCoordinatesProvider()
   }
 
   public async execute(data: ICreateEvent): Promise<Event> {
@@ -18,14 +20,14 @@ export class CreateEvent {
       date: data.date,
     })
 
-    if (eventExists) {
-      throw new AppError('Event is already exists', 401)
+    if (eventExists && eventExists?.length > 0) {
+      throw new AppError('Event is already exists', 409)
     }
 
-    const cityName = await this.getCityNameByCoordinates(
-      data.location[0],
-      data.location[1],
-    )
+    const cityName = await this.getCityNameByCoordinatesProvider.getCityName({
+      latitude: data.location[0],
+      longitude: data.location[1],
+    })
 
     const eventParse: ICreateEvent = {
       ...data,
@@ -38,23 +40,5 @@ export class CreateEvent {
     }
 
     return event
-  }
-
-  private async getCityNameByCoordinates(
-    latitude: string,
-    longitude: string,
-  ): Promise<string> {
-    const key = process.env.OPEN_CAGE_KEY
-    console.log(latitude, longitude)
-    const response = await axios.get(
-      `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${key}`,
-    )
-
-    if (!response.data) {
-      throw new AppError('Erro ao informar latitude ou longitude')
-    }
-
-    const city = response.data.results[0].components.city
-    return city
   }
 }
