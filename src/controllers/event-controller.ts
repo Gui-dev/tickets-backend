@@ -4,6 +4,8 @@ import { MultipartFile } from '@fastify/multipart'
 import { CreateEvent } from '../use-cases/create-event'
 import { createEventValidation } from '../validations/create-event-validation'
 import { UploadImagesProvider } from '../providers/upload-images-provider'
+import { findEventByLocationValidation } from '../validations/find-events-by-location-validation'
+import { FindEventByLocation } from '../use-cases/find-event-by-location'
 
 type IRequestParams = {
   user_id?: {
@@ -70,5 +72,17 @@ export class EventController {
     const createEvent = new CreateEvent()
     const event = await createEvent.execute(eventParse)
     return response.status(201).send(event)
+  }
+
+  public async show(
+    request: FastifyRequest,
+    response: FastifyReply,
+  ): Promise<FastifyReply> {
+    const { latitude, longitude } = findEventByLocationValidation.parse(
+      request.query,
+    )
+    const findEventByLocation = new FindEventByLocation()
+    const event = await findEventByLocation.execute({ latitude, longitude })
+    return response.status(200).send(event)
   }
 }
