@@ -51,9 +51,9 @@ export class EventController {
 
     const banner = await UploadImagesProvider.uploadBannerImage(data.banner)
     const flyers = await UploadImagesProvider.uploadFlyersImages(data.flyers)
-    const location = data.location.value.split(', ')
-    const categories = data.categories.value.trim().split(', ')
-    const coupons = data.coupons.value.trim().split(', ')
+    const location = data.location.value.trim().split(',')
+    const categories = data.categories.value.trim().split(',')
+    const coupons = data.coupons.value.trim().split(',')
 
     const eventParse = createEventValidation.parse({
       title: data.title.value,

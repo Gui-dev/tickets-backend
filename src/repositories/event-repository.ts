@@ -1,4 +1,5 @@
 import { Event } from '@prisma/client'
+
 import { IEventRepository } from '../contracts/repositories/event-repository'
 import { ICreateEvent } from '../dtos/create-event'
 import { prisma } from '../services/prisma'

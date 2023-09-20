@@ -1,8 +1,11 @@
+import 'reflect-metadata'
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import multipart from '@fastify/multipart'
 import { ZodError } from 'zod'
 import 'dotenv/config'
+
+import './injections'
 
 import { AppError } from './errors/app-error'
 import { userRoutes } from './routes/user.routes'

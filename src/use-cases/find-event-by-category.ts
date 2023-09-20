@@ -1,16 +1,14 @@
+import { inject, injectable } from 'tsyringe'
 import { Event } from '@prisma/client'
 
 import { IEventRepository } from '../contracts/repositories/event-repository'
 import { IFindEventByCategoryDTO } from '../dtos/find-event-by-category-dto'
 import { AppError } from '../errors/app-error'
-import { EventRepository } from '../repositories/event-repository'
 
+@injectable()
 export class FindEventByCategory {
-  private eventRepository: IEventRepository
-
-  constructor() {
-    this.eventRepository = new EventRepository()
-  }
+  // eslint-disable-next-line no-useless-constructor, prettier/prettier
+  constructor(@inject('EventRepository') private eventRepository: IEventRepository) { }
 
   public async execute({
     category,
