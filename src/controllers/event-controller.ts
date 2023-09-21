@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { container } from 'tsyringe'
 import { MultipartFile } from '@fastify/multipart'
 
 import { CreateEvent } from '../use-cases/create-event'
@@ -69,7 +70,7 @@ export class EventController {
       date: new Date(data.date.value),
     })
 
-    const createEvent = new CreateEvent()
+    const createEvent = container.resolve(CreateEvent)
     const event = await createEvent.execute(eventParse)
     return response.status(201).send(event)
   }

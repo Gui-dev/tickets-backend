@@ -7,7 +7,7 @@ import { AppError } from '../errors/app-error'
 
 @injectable()
 export class FindEventByCategory {
-  // eslint-disable-next-line no-useless-constructor, prettier/prettier
+  // eslint-disable-next-line prettier/prettier
   constructor(@inject('EventRepository') private eventRepository: IEventRepository) { }
 
   public async execute({

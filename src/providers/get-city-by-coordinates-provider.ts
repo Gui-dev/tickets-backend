@@ -12,7 +12,6 @@ export class GetCityByCoordinatesProvider
     longitude,
   }: IFindEventByLocationDTO): Promise<string> {
     const key = process.env.OPEN_CAGE_KEY
-    console.log(latitude, longitude)
     const response = await axios.get(
       `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${key}`,
     )

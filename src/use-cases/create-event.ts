@@ -1,18 +1,20 @@
+/* eslint-disable prettier/prettier */
+import { inject, injectable } from 'tsyringe'
 import { Event } from '@prisma/client'
+
 import { IEventRepository } from '../contracts/repositories/event-repository'
 import { ICreateEvent } from '../dtos/create-event'
 import { AppError } from '../errors/app-error'
-import { EventRepository } from '../repositories/event-repository'
-import { GetCityByCoordinatesProvider } from './../providers/get-city-by-coordinates-provider'
 import { IGetCityByCoordinatesProvider } from '../providers/contracts/get-city-by-coordinates-provider'
 
+@injectable()
 export class CreateEvent {
-  private eventRepository: IEventRepository
-  private getCityNameByCoordinatesProvider: IGetCityByCoordinatesProvider
-  constructor() {
-    this.eventRepository = new EventRepository()
-    this.getCityNameByCoordinatesProvider = new GetCityByCoordinatesProvider()
-  }
+  constructor(
+    @inject('EventRepository')
+    private eventRepository: IEventRepository,
+    @inject('GetCityByCoordinatesProvider')
+    private getCityNameByCoordinatesProvider: IGetCityByCoordinatesProvider,
+  ) { }
 
   public async execute(data: ICreateEvent): Promise<Event> {
     const eventExists = await this.eventRepository.findByLocationAndDate({
