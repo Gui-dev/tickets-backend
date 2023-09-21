@@ -2,7 +2,7 @@ import supertest from 'supertest'
 
 import { app } from '../server'
 
-describe('#Create Event', () => {
+describe('#Create Event END2END', () => {
   it('should be able to create a event', async () => {
     const response = await supertest(app.server)
       .post('/events')
