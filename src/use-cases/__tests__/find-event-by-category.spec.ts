@@ -3,6 +3,7 @@ import { FindEventByCategory } from '../find-event-by-category'
 import { CreateEvent } from '../create-event'
 import { GetCityByCoordinatesProviderInMemory } from '../../providers/in-memory/get-city-by-coordinates-provider-in-memory'
 import { ICreateEvent } from '../../dtos/create-event'
+import { AppError } from '../../errors/app-error'
 
 let fakeEventRepositoryInMemory: EventRepositoryInMemory
 let findEventByCategory: FindEventByCategory
@@ -23,6 +24,7 @@ describe('# Find event by category', () => {
     banner: '/Users/dracarys/Downloads/bruce_wayne.jpeg',
     flyers: ['/Users/dracarys/Downloads/chocolates.jpeg'],
   }
+
   beforeEach(() => {
     fakeEventRepositoryInMemory = new EventRepositoryInMemory()
     getCityByCoordinatesProviderInMemory =
@@ -43,6 +45,14 @@ describe('# Find event by category', () => {
     const category = 'fake-category'
     const result = await findEventByCategory.execute({ category })
 
-    expect(category).toEqual(result[0].categories[0])
+    expect(result[0].categories[0]).toEqual(category)
+  })
+
+  it('should not be possible to return an event by category', async () => {
+    const category = 'fake-category'
+
+    await expect(
+      findEventByCategory.execute({ category }),
+    ).rejects.toBeInstanceOf(AppError)
   })
 })
