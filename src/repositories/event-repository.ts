@@ -7,8 +7,23 @@ import { IFindByLocationAndDate } from '../dtos/find-by-location-and-date'
 import { IFindEventByCityDTO } from '../dtos/find-event-by-city-dto'
 import { IFindEventByLocationDTO } from '../dtos/find-event-by-location-dto'
 import { IFindEventByCategoryDTO } from '../dtos/find-event-by-category-dto'
+import { IFindEventByNameDTO } from '../dtos/find-event-by-name-dto'
 
 export class EventRepository implements IEventRepository {
+  public async findEventsByName({
+    name,
+  }: IFindEventByNameDTO): Promise<Event[] | null> {
+    const events = await prisma.event.findMany({
+      where: {
+        title: {
+          contains: name,
+        },
+      },
+    })
+
+    return events
+  }
+
   public async findByLocationAndDate(
     data: IFindByLocationAndDate,
   ): Promise<Event[] | null> {
