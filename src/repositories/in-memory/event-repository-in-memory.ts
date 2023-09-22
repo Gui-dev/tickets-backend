@@ -8,9 +8,27 @@ import { IFindEventByCityDTO } from '../../dtos/find-event-by-city-dto'
 import { IFindEventByLocationDTO } from '../../dtos/find-event-by-location-dto'
 import { randomUUID } from 'crypto'
 import { IFindEventByNameDTO } from '../../dtos/find-event-by-name-dto'
+import { IFindEventByIdDTO } from '../../dtos/find-event-by-id-dto'
 
 export class EventRepositoryInMemory implements IEventRepository {
   public events = new Map()
+
+  public async findEventById(data: IFindEventByIdDTO): Promise<Event | null> {
+    const event = Array.from(this.events.entries())
+      .map((eventsArray) => {
+        const id = eventsArray[0]
+        const data = eventsArray[1]
+
+        return {
+          id,
+          ...data,
+        }
+      })
+      .filter((event: Event) => {
+        return event.id === data.id
+      })
+    return event[0]
+  }
 
   public async create(data: ICreateEvent): Promise<Event> {
     const id = randomUUID()
