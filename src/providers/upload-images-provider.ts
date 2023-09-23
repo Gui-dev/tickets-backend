@@ -3,9 +3,10 @@ import { MultipartFile } from '@fastify/multipart'
 
 import { supabase } from '../services/supabase'
 import { AppError } from '../errors/app-error'
+import { IUploadImagesProvider } from './contracts/upload-images-provider'
 
-export class UploadImagesProvider {
-  public static async uploadBannerImage(banner: any): Promise<string> {
+export class UploadImagesProvider implements IUploadImagesProvider {
+  public async uploadBannerImage(banner: any): Promise<string> {
     const bannerBuffer = await banner.toBuffer()
     const { data: bannerPath, error } = await supabase.storage
       .from('tickets-bucket')
@@ -20,7 +21,7 @@ export class UploadImagesProvider {
     return getBannerUrl.publicUrl
   }
 
-  public static async uploadFlyersImages(flyers: any): Promise<Array<string>> {
+  public async uploadFlyersImages(flyers: any): Promise<Array<string>> {
     const flyersUrl: string[] = []
 
     if (flyers.length > 0) {

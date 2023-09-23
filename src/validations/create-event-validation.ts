@@ -10,10 +10,18 @@ export const createEventValidation = z.object({
     z.string().nonempty('Campo latitude é obrigatório'),
     z.string().nonempty('Campo longitude é obrigatório'),
   ),
-  banner: z.string().nonempty('Url da imagem do banner é obrigatório'),
-  flyers: z.array(
-    z.string().nonempty('Urls da imagem dos flyers é obrigatório'),
-  ),
+  banner: z.object({
+    filename: z.string(),
+    mimetype: z.string().refine((mimetype) => mimetype.startsWith('image/'), {
+      message: 'O arquivo deve ser uma imagem.',
+    }),
+  }),
+  flyers: z.object({
+    filename: z.string(),
+    mimetype: z.string().refine((mimetype) => mimetype.startsWith('image/'), {
+      message: 'O arquivo deve ser uma imagem.',
+    }),
+  }),
   coupons: z.array(z.string().nonempty('Campo cupons é obrigatório')),
   price: z.coerce.number(),
   sector: z.string().nonempty('Campo setor é obrigatório'),

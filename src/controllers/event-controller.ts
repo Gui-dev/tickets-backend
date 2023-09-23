@@ -4,7 +4,6 @@ import { MultipartFile } from '@fastify/multipart'
 
 import { CreateEvent } from '../use-cases/create-event'
 import { createEventValidation } from '../validations/create-event-validation'
-import { UploadImagesProvider } from '../providers/upload-images-provider'
 import { findEventByLocationValidation } from '../validations/find-events-by-location-validation'
 import { FindEventByLocation } from '../use-cases/find-event-by-location'
 
@@ -49,9 +48,6 @@ export class EventController {
     response: FastifyReply,
   ): Promise<FastifyReply> {
     const data: IRequestParams = request.body as IRequestParams
-
-    const banner = await UploadImagesProvider.uploadBannerImage(data.banner)
-    const flyers = await UploadImagesProvider.uploadFlyersImages(data.flyers)
     const location = data.location.value.trim().split(',')
     const categories = data.categories.value.trim().split(',')
     const coupons = data.coupons.value.trim().split(',')
@@ -62,16 +58,22 @@ export class EventController {
       categories,
       city: data.city.value,
       location,
-      banner,
-      flyers,
+      banner: data.banner,
+      flyers: data.flyers,
       coupons,
       price: Number(data.price.value),
       sector: data.sector.value,
       date: new Date(data.date.value),
     })
 
+    const eventResult = {
+      ...eventParse,
+      banner: data.banner,
+      flyers: data.flyers,
+    }
+
     const createEvent = container.resolve(CreateEvent)
-    const event = await createEvent.execute(eventParse)
+    const event = await createEvent.execute(eventResult)
     return response.status(201).send(event)
   }
 

@@ -1,3 +1,5 @@
+import { MultipartFile } from '@fastify/multipart'
+
 export interface ICreateEvent {
   user_id?: string
   title: string
@@ -5,8 +7,8 @@ export interface ICreateEvent {
   categories: Array<string>
   city: string
   location: Array<string>
-  banner: string
-  flyers: Array<string>
+  banner: MultipartFile | string
+  flyers: MultipartFile[] | MultipartFile | string[]
   coupons: Array<string>
   price: number
   sector: string

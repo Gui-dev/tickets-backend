@@ -6,6 +6,7 @@ import { IEventRepository } from '../contracts/repositories/event-repository'
 import { ICreateEvent } from '../dtos/create-event'
 import { AppError } from '../errors/app-error'
 import { IGetCityByCoordinatesProvider } from '../providers/contracts/get-city-by-coordinates-provider'
+import { IUploadImagesProvider } from '../providers/contracts/upload-images-provider'
 
 @injectable()
 export class CreateEvent {
@@ -14,6 +15,8 @@ export class CreateEvent {
     private eventRepository: IEventRepository,
     @inject('GetCityByCoordinatesProvider')
     private getCityNameByCoordinatesProvider: IGetCityByCoordinatesProvider,
+    @inject('UploadImagesProvider')
+    private uploadImagesProvider: IUploadImagesProvider,
   ) { }
 
   public async execute(data: ICreateEvent): Promise<Event> {
@@ -31,9 +34,14 @@ export class CreateEvent {
       longitude: data.location[1],
     })
 
+    const banner = await this.uploadImagesProvider.uploadBannerImage(data.banner)
+    const flyers = await this.uploadImagesProvider.uploadFlyersImages(data.banner)
+
     const eventParse: ICreateEvent = {
       ...data,
       city: cityName,
+      banner,
+      flyers,
     }
 
     const event = await this.eventRepository.create(eventParse)
