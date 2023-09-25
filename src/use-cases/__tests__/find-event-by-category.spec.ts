@@ -4,11 +4,13 @@ import { CreateEvent } from '../create-event'
 import { GetCityByCoordinatesProviderInMemory } from '../../providers/in-memory/get-city-by-coordinates-provider-in-memory'
 import { ICreateEvent } from '../../dtos/create-event'
 import { AppError } from '../../errors/app-error'
+import { UploadImagesProviderInMemory } from '../../providers/in-memory/upload-images-provider-in-memory'
 
 let fakeEventRepositoryInMemory: EventRepositoryInMemory
 let findEventByCategory: FindEventByCategory
 let createEvent: CreateEvent
 let getCityByCoordinatesProviderInMemory: GetCityByCoordinatesProviderInMemory
+let uploadImagesProviderInMemory: UploadImagesProviderInMemory
 
 describe('# Find event by category', () => {
   const event: ICreateEvent = {
@@ -29,15 +31,14 @@ describe('# Find event by category', () => {
     fakeEventRepositoryInMemory = new EventRepositoryInMemory()
     getCityByCoordinatesProviderInMemory =
       new GetCityByCoordinatesProviderInMemory()
+    uploadImagesProviderInMemory = new UploadImagesProviderInMemory()
+
     createEvent = new CreateEvent(
       fakeEventRepositoryInMemory,
       getCityByCoordinatesProviderInMemory,
+      uploadImagesProviderInMemory,
     )
     findEventByCategory = new FindEventByCategory(fakeEventRepositoryInMemory)
-  })
-
-  afterEach(() => {
-    jest.clearAllMocks()
   })
 
   it('should be able return an array of events by category', async () => {
