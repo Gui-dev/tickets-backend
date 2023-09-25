@@ -5,6 +5,6 @@ import { IGetCityByCoordinatesProvider } from '../contracts/get-city-by-coordina
 export class GetCityByCoordinatesProviderInMemory
   implements IGetCityByCoordinatesProvider {
   public async getCityName(data: IFindEventByLocationDTO): Promise<string> {
-    return 'fake city'
+    return 'fake-city'
   }
 }
