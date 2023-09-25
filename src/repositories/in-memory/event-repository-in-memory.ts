@@ -59,7 +59,7 @@ export class EventRepositoryInMemory implements IEventRepository {
         }
       })
       .filter((event: Event) => {
-        return event.title.includes(data.name)
+        return event.title === data.name
       })
     return events
   }

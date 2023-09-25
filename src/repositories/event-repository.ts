@@ -89,6 +89,8 @@ export class EventRepository implements IEventRepository {
     const event = await prisma.event.create({
       data: {
         ...data,
+        banner: data.banner as string,
+        flyers: data.flyers as string[],
       },
     })
 
