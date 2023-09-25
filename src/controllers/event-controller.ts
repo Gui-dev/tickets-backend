@@ -4,8 +4,8 @@ import { MultipartFile } from '@fastify/multipart'
 
 import { CreateEvent } from '../use-cases/create-event'
 import { createEventValidation } from '../validations/create-event-validation'
-import { findEventByLocationValidation } from '../validations/find-events-by-location-validation'
-import { FindEventByLocation } from '../use-cases/find-event-by-location'
+import { FindEventById } from '../use-cases/find-event-by-id'
+import { findEventByIdValidation } from '../validations/find-event-by-id-validation'
 
 type IRequestParams = {
   user_id?: {
@@ -81,11 +81,10 @@ export class EventController {
     request: FastifyRequest,
     response: FastifyReply,
   ): Promise<FastifyReply> {
-    const { latitude, longitude } = findEventByLocationValidation.parse(
-      request.query,
-    )
-    const findEventByLocation = new FindEventByLocation()
-    const event = await findEventByLocation.execute({ latitude, longitude })
+    const { id } = findEventByIdValidation.parse(request.params)
+    const findEventById = container.resolve(FindEventById)
+    const event = await findEventById.execute({ id })
+
     return response.status(200).send(event)
   }
 }
