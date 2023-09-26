@@ -68,7 +68,20 @@ export class EventRepository implements IEventRepository {
   public async findEventsByLocation(
     data: IFindEventByLocationDTO,
   ): Promise<Event[]> {
-    throw new Error('Method not implemented.')
+    const events = await prisma.event.findMany({
+      where: {
+        location: {
+          has: data.latitude,
+        },
+        AND: {
+          location: {
+            has: data.longitude,
+          },
+        },
+      },
+    })
+
+    return events
   }
 
   public async findEventsByCategory({
