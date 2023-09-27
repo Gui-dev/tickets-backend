@@ -5,8 +5,8 @@ import { IGetCityByCoordinatesProvider } from './contracts/get-city-by-coordinat
 import { IFindEventByLocationDTO } from '../dtos/find-event-by-location-dto'
 
 export class GetCityByCoordinatesProvider
-  // eslint-disable-next-line prettier/prettier
-  implements IGetCityByCoordinatesProvider {
+  implements IGetCityByCoordinatesProvider
+{
   public async getCityName({
     latitude,
     longitude,

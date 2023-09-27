@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { inject, injectable } from 'tsyringe'
 import { Event } from '@prisma/client'
 
@@ -17,7 +16,7 @@ export class CreateEvent {
     private getCityNameByCoordinatesProvider: IGetCityByCoordinatesProvider,
     @inject('UploadImagesProvider')
     private uploadImagesProvider: IUploadImagesProvider,
-  ) { }
+  ) {}
 
   public async execute(data: ICreateEvent): Promise<Event> {
     const eventExists = await this.eventRepository.findByLocationAndDate({
@@ -34,8 +33,12 @@ export class CreateEvent {
       longitude: data.location[1],
     })
 
-    const banner = await this.uploadImagesProvider.uploadBannerImage(data.banner)
-    const flyers = await this.uploadImagesProvider.uploadFlyersImages(data.banner)
+    const banner = await this.uploadImagesProvider.uploadBannerImage(
+      data.banner,
+    )
+    const flyers = await this.uploadImagesProvider.uploadFlyersImages(
+      data.banner,
+    )
 
     const eventParse: ICreateEvent = {
       ...data,

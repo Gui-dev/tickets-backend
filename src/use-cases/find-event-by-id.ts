@@ -7,8 +7,9 @@ import { AppError } from '../errors/app-error'
 
 @injectable()
 export class FindEventById {
-  // eslint-disable-next-line prettier/prettier
-  constructor(@inject('EventRepository') private eventRepository: IEventRepository,) { }
+  constructor(
+    @inject('EventRepository') private eventRepository: IEventRepository,
+  ) {}
 
   public async execute({ id }: IFindEventByIdDTO): Promise<Event> {
     const event = await this.eventRepository.findEventById({ id })
