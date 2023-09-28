@@ -9,6 +9,7 @@ import { IFindEventByLocationDTO } from '../dtos/find-event-by-location-dto'
 import { IFindEventByCategoryDTO } from '../dtos/find-event-by-category-dto'
 import { IFindEventByNameDTO } from '../dtos/find-event-by-name-dto'
 import { IFindEventByIdDTO } from '../dtos/find-event-by-id-dto'
+import { IUpdateEventUserIdDTO } from '../dtos/update-event-user-id-dto'
 
 export class EventRepository implements IEventRepository {
   public async findEventById(data: IFindEventByIdDTO): Promise<Event | null> {
@@ -104,6 +105,25 @@ export class EventRepository implements IEventRepository {
         ...data,
         banner: data.banner as string,
         flyers: data.flyers as string[],
+      },
+    })
+
+    return event
+  }
+
+  public async updateEventUserId({
+    event_id,
+    user_id,
+  }: IUpdateEventUserIdDTO): Promise<Event> {
+    const event = await prisma.event.update({
+      where: {
+        id: event_id,
+      },
+      data: {
+        user_id,
+      },
+      include: {
+        participants: true,
       },
     })
 
