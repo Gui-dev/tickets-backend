@@ -8,7 +8,6 @@ import 'dotenv/config'
 import './injections'
 
 import { AppError } from './errors/app-error'
-import { userRoutes } from './routes/user.routes'
 import { eventRoutes } from './routes/event.routes'
 
 export const app = Fastify()
@@ -22,7 +21,6 @@ export const main = () => {
   })
 
   app.register(eventRoutes)
-  app.register(userRoutes)
 
   app.setErrorHandler(function (error, _request, reply) {
     if (error instanceof AppError) {
