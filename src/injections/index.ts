@@ -9,10 +9,18 @@ import { GetCityByCoordinatesProvider } from '../providers/get-city-by-coordinat
 import { UploadImagesProvider } from '../providers/upload-images-provider'
 import { IUploadImagesProvider } from '../providers/contracts/upload-images-provider'
 
+import { UserRepository } from '../repositories/user-repository'
+import { IUserRepository } from '../contracts/repositories/user.repository'
+
+import { ICalculateDistance } from '../lib/contracts/calculate-distance'
+import { CalculateDistance } from '../lib/calculate-distance'
+
 container.registerSingleton<IEventRepository>(
   'EventRepository',
   EventRepository,
 )
+
+container.registerSingleton<IUserRepository>('UserRepository', UserRepository)
 
 container.registerSingleton<IGetCityByCoordinatesProvider>(
   'GetCityByCoordinatesProvider',
@@ -22,4 +30,9 @@ container.registerSingleton<IGetCityByCoordinatesProvider>(
 container.registerSingleton<IUploadImagesProvider>(
   'UploadImagesProvider',
   UploadImagesProvider,
+)
+
+container.registerSingleton<ICalculateDistance>(
+  'CalculateDistance',
+  CalculateDistance,
 )
