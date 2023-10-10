@@ -10,6 +10,7 @@ describe('#Create Event END2END', () => {
         .field('title', 'fake-title')
         .field('description', 'fake-description')
         .field('city', 'fake-city')
+        .field('address', 'fake-address')
         .field('categories', 'fake-category')
         .field('location', '-23,60005, -46,72016')
         .field('coupons', 'fake-coupon')

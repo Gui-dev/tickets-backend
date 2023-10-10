@@ -28,10 +28,11 @@ export class CreateEvent {
       throw new AppError('Event is already exists', 409)
     }
 
-    const cityName = await this.getCityNameByCoordinatesProvider.getCityName({
-      latitude: data.location[0],
-      longitude: data.location[1],
-    })
+    const { city, address } =
+      await this.getCityNameByCoordinatesProvider.getCityName({
+        latitude: data.location[0],
+        longitude: data.location[1],
+      })
 
     const banner = await this.uploadImagesProvider.uploadBannerImage(
       data.banner,
@@ -42,7 +43,8 @@ export class CreateEvent {
 
     const eventParse: ICreateEvent = {
       ...data,
-      city: cityName,
+      city,
+      address,
       banner,
       flyers,
     }

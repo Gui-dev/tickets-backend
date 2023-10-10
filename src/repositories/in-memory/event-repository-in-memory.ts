@@ -9,6 +9,7 @@ import { IFindEventByLocationDTO } from '../../dtos/find-event-by-location-dto'
 import { randomUUID } from 'crypto'
 import { IFindEventByNameDTO } from '../../dtos/find-event-by-name-dto'
 import { IFindEventByIdDTO } from '../../dtos/find-event-by-id-dto'
+import { IUpdateEventUserIdDTO } from '../../dtos/update-event-user-id-dto'
 
 export class EventRepositoryInMemory implements IEventRepository {
   public events = new Map()
@@ -145,5 +146,9 @@ export class EventRepositoryInMemory implements IEventRepository {
       })
 
     return events
+  }
+
+  public async updateEventUserId(data: IUpdateEventUserIdDTO): Promise<Event> {
+    throw new Error('Method not implemented.')
   }
 }

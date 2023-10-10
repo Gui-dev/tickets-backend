@@ -17,6 +17,7 @@ describe('# Find event by category', () => {
     title: 'fake-title',
     description: 'fake-description',
     city: 'fake-city',
+    address: 'fake-address',
     categories: ['fake-category'],
     location: ['1.48327483729', '1.237821739'],
     coupons: ['fake-coupon'],

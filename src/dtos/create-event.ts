@@ -6,6 +6,7 @@ export interface ICreateEvent {
   description: string
   categories: Array<string>
   city: string
+  address: string
   location: Array<string>
   banner: MultipartFile | string
   flyers: MultipartFile[] | MultipartFile | string[]
