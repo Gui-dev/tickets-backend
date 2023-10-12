@@ -6,6 +6,7 @@ import { CreateEvent } from '../use-cases/create-event'
 import { createEventValidation } from '../validations/create-event-validation'
 import { FindEventById } from '../use-cases/find-event-by-id'
 import { findEventByIdValidation } from '../validations/find-event-by-id-validation'
+import { FindEvents } from '../use-cases/find-events'
 
 type IRequestParams = {
   user_id?: {
@@ -43,6 +44,15 @@ type IRequestParams = {
 }
 
 export class EventController {
+  public async index(
+    request: FastifyRequest,
+    response: FastifyReply,
+  ): Promise<FastifyReply> {
+    const findEvents = container.resolve(FindEvents)
+    const events = await findEvents.execute()
+    return response.status(200).send(events)
+  }
+
   public async store(
     request: FastifyRequest,
     response: FastifyReply,
