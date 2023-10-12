@@ -12,8 +12,9 @@ const participantsController = new ParticipantsController()
 
 export const eventRoutes = async (fastify: FastifyInstance): Promise<void> => {
   fastify.post('/events', eventController.store)
+  fastify.get('/events', eventController.index)
   fastify.get('/events/:id', eventController.show)
-  fastify.get('/events', eventLocationController.show)
+  fastify.get('/events/location', eventLocationController.show)
   fastify.get('/events/category/:category', eventCategoryController.show)
 
   fastify.post('/events/:id/participants', participantsController.store)
