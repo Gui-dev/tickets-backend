@@ -18,7 +18,7 @@ export class CreateEvent {
     private uploadImagesProvider: IUploadImagesProvider,
   ) {}
 
-  public async execute(data: ICreateEvent): Promise<Event> {
+  public async execute(data: Omit<ICreateEvent, 'address'>): Promise<Event> {
     const eventExists = await this.eventRepository.findByLocationAndDate({
       location: data.location,
       date: data.date,
