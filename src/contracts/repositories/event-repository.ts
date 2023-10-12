@@ -10,6 +10,7 @@ import { IUpdateEventUserIdDTO } from '../../dtos/update-event-user-id-dto'
 
 export interface IEventRepository {
   create(data: ICreateEvent): Promise<Event>
+  findMainEvents(): Promise<Event[]>
   findEventById(data: IFindEventByIdDTO): Promise<Event | null>
   findByLocationAndDate(data: IFindByLocationAndDate): Promise<Event[] | null>
   findEventsByCity(data: IFindEventByCityDTO): Promise<Event[] | null>
