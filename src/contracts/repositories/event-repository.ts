@@ -11,11 +11,12 @@ import { IUpdateEventUserIdDTO } from '../../dtos/update-event-user-id-dto'
 export interface IEventRepository {
   create(data: ICreateEvent): Promise<Event>
   findMainEvents(): Promise<Event[]>
+  filterEvents(): Promise<Event[]>
   findEventById(data: IFindEventByIdDTO): Promise<Event | null>
   findByLocationAndDate(data: IFindByLocationAndDate): Promise<Event[] | null>
   findEventsByCity(data: IFindEventByCityDTO): Promise<Event[] | null>
   findEventsByLocation(data: IFindEventByLocationDTO): Promise<Event[] | null>
   findEventsByCategory(data: IFindEventByCategoryDTO): Promise<Event[] | null>
-  findEventsByName(data: IFindEventByNameDTO): Promise<Event[] | null>
+  findEventsByName(data: IFindEventByNameDTO): Promise<Event[]>
   updateEventUserId(data: IUpdateEventUserIdDTO): Promise<Event>
 }

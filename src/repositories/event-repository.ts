@@ -12,6 +12,10 @@ import { IFindEventByIdDTO } from '../dtos/find-event-by-id-dto'
 import { IUpdateEventUserIdDTO } from '../dtos/update-event-user-id-dto'
 
 export class EventRepository implements IEventRepository {
+  public async filterEvents(): Promise<Event[]> {
+    throw new Error('Method not implemented.')
+  }
+
   public async findMainEvents(): Promise<Event[]> {
     const currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
@@ -38,7 +42,7 @@ export class EventRepository implements IEventRepository {
 
   public async findEventsByName({
     name,
-  }: IFindEventByNameDTO): Promise<Event[] | null> {
+  }: IFindEventByNameDTO): Promise<Event[]> {
     const events = await prisma.event.findMany({
       where: {
         title: {
