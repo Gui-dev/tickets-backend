@@ -38,7 +38,7 @@ export class CreateEvent {
       data.banner,
     )
     const flyers = await this.uploadImagesProvider.uploadFlyersImages(
-      data.banner,
+      data.flyers,
     )
 
     const eventParse: ICreateEvent = {

@@ -16,12 +16,14 @@ export const createEventValidation = z.object({
       message: 'O arquivo deve ser uma imagem.',
     }),
   }),
-  flyers: z.object({
-    filename: z.string(),
-    mimetype: z.string().refine((mimetype) => mimetype.startsWith('image/'), {
-      message: 'O arquivo deve ser uma imagem.',
+  flyers: z.array(
+    z.object({
+      filename: z.string(),
+      mimetype: z.string().refine((mimetype) => mimetype.startsWith('image/'), {
+        message: 'O arquivo deve ser uma imagem.',
+      }),
     }),
-  }),
+  ),
   coupons: z.array(z.string().nonempty('Campo cupons é obrigatório')),
   price: z.coerce.number(),
   sector: z.string().nonempty('Campo setor é obrigatório'),
