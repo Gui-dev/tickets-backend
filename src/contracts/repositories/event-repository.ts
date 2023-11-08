@@ -7,11 +7,12 @@ import { IFindEventByCategoryDTO } from '../../dtos/find-event-by-category-dto'
 import { IFindEventByNameDTO } from '../../dtos/find-event-by-name-dto'
 import { IFindEventByIdDTO } from '../../dtos/find-event-by-id-dto'
 import { IUpdateEventUserIdDTO } from '../../dtos/update-event-user-id-dto'
+import { IFilterEventsDTO } from '../../dtos/filter-events-dto'
 
 export interface IEventRepository {
   create(data: ICreateEvent): Promise<Event>
   findMainEvents(): Promise<Event[]>
-  filterEvents(): Promise<Event[]>
+  filterEvents(data: IFilterEventsDTO): Promise<Event[]>
   findEventById(data: IFindEventByIdDTO): Promise<Event | null>
   findByLocationAndDate(data: IFindByLocationAndDate): Promise<Event[] | null>
   findEventsByCity(data: IFindEventByCityDTO): Promise<Event[] | null>

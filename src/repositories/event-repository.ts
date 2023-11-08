@@ -10,10 +10,41 @@ import { IFindEventByCategoryDTO } from '../dtos/find-event-by-category-dto'
 import { IFindEventByNameDTO } from '../dtos/find-event-by-name-dto'
 import { IFindEventByIdDTO } from '../dtos/find-event-by-id-dto'
 import { IUpdateEventUserIdDTO } from '../dtos/update-event-user-id-dto'
+import { IFilterEventsDTO } from '../dtos/filter-events-dto'
 
 export class EventRepository implements IEventRepository {
-  public async filterEvents(): Promise<Event[]> {
-    throw new Error('Method not implemented.')
+  public async filterEvents(data: IFilterEventsDTO): Promise<Event[]> {
+    const currentDate = new Date()
+    currentDate.setHours(0, 0, 0, 0)
+
+    const events = await prisma.event.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: data.name,
+            },
+          },
+          {
+            date: {
+              gte: currentDate,
+            },
+          },
+          {
+            categories: {
+              has: data.category,
+            },
+          },
+          {
+            price: {
+              lte: data.price,
+            },
+          },
+        ],
+      },
+    })
+
+    return events
   }
 
   public async findMainEvents(): Promise<Event[]> {
@@ -45,9 +76,37 @@ export class EventRepository implements IEventRepository {
   }: IFindEventByNameDTO): Promise<Event[]> {
     const events = await prisma.event.findMany({
       where: {
-        title: {
-          contains: name,
-        },
+        OR: [
+          {
+            title: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          },
+          {
+            address: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          },
+          {
+            city: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          },
+          {
+            description: {
+              contains: name,
+              mode: 'insensitive',
+            },
+          },
+          {
+            categories: {
+              has: name,
+            },
+          },
+        ],
       },
     })
 
